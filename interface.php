@@ -18,13 +18,17 @@
         </div>
 
         <!-- POINTS -->
-        <h1 class="my-3"><?= $this->points ?> points</h1>
+        <h1 class="my-3"><?= $this->points ?> Points</h1>
+    
         <!-- MESSAGE -->
-        <?php if($this->message): ?>
+        <?php if (!empty($this->messages)): ?>
             <div class="alert alert-info">
-                <?= $this->message ?>
+                <?php foreach ($this->messages as $message): ?>
+                    <div><?= $message ?></div>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
+        
         <?php if($this->points == 0): ?>
             <a href="index.php?action=nuit" class="btn btn-secondary">Nuit</a>
         <?php else: ?>
@@ -102,7 +106,8 @@
                     </div>
                 <?php endforeach; ?>
                 </div>
-            <pre><?php print_r($this) ?></pre>
+            <!-- debug --> 
+            <!-- <pre><?php print_r($this) ?></pre> -->
         </div>
     </div>
 
