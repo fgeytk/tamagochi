@@ -59,11 +59,13 @@
                     <div class="card">
                         <div class="card-body">
                             <h5><?= $animal->getNom() ?></h5>
-                            <p>Âge : <?= $animal->getAge() ?></p>
-                            <p>Faim : <?= $animal->getFaim() ?></p>
-                            <p>Soif : <?= $animal->getSoif() ?></p>
-                            <p>Humeur : <?= $animal->getHumeur() ?></p>
-                            <p>Santé : <?= $animal->getSante() ?></p>
+                            <h6>Âge : <?= $animal->getAge() ?></h6>
+                            <ul>
+                                <li>Faim : <?= $animal->getFaim() ?></li>
+                                <li>Soif : <?= $animal->getSoif() ?></li>
+                                <li>Humeur : <?= $animal->getHumeur() ?></li>
+                                <li>Santé : <?= $animal->getSante() ?></li>
+                            </ul>
                             <a href="index.php?action=soignerAnimal&id=<?= $id ?>">Soigner</a>
                             <a href="index.php?action=carresse&id=<?= $id ?>"> Carresse</a>
                             

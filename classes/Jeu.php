@@ -50,7 +50,7 @@ class Jeu
 
                 case 'rechercherProvisions':
                     $this->actionRechercherProvisions();
-                    //messages en fonction de la provision trouvee
+                    //les messages sont dans action pour print la valeur de l'animal et/ou la provision
                     //$this->messages[] = "Vous avez trouve de nouvelles provisions !";
                     break;
 
