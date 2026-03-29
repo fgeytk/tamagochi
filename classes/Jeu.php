@@ -1,6 +1,9 @@
 <?php
 
 use Animaux\Animal;
+use Animaux\Chat;
+use Animaux\Chien;
+use Animaux\Lapin;
 use Provisions\Coca;
 use Provisions\Eau;
 use Provisions\Hamburger;
@@ -77,6 +80,14 @@ class Jeu
                 case 'nourrirAnimal':
                     $this->actionNourrir();
                     //$this->messages[] = "Vous avez nourri un animal !";
+                    break;
+
+                case 'jouerEnsemble':
+                    $this->actionJouerEnsemble();
+                    break;
+
+                case 'combat':
+                    $this->actionCombat();
                     break;
             }
 
@@ -194,10 +205,70 @@ class Jeu
         if ($this->points >= 1 && isset($_GET['nom'])) {
             $this->points--;
 
-            $nom = $_GET['nom'];
-            $animal = new Animal($nom);
+            $nom  = $_GET['nom'];
+            $type = $_GET['type'] ?? 'Animal';
+
+            $animal = match($type) {
+                'Chat'  => new Chat($nom),
+                'Chien' => new Chien($nom),
+                'Lapin' => new Lapin($nom),
+                default => new Animal($nom),
+            };
+
             $this->ajouteAnimal($animal);
-            $this-> messages[] = "Vous avez créé un animal nommé $nom !";
+            $this->messages[] = "Vous avez créé " . htmlspecialchars($nom) . " le " . htmlspecialchars($type) . " !";
+        }
+    }
+
+    private function actionJouerEnsemble()
+    {
+        if ($this->points >= 1 && isset($_GET['id1'], $_GET['id2'])) {
+            $id1 = $_GET['id1'];
+            $id2 = $_GET['id2'];
+
+            if ($id1 !== $id2
+                && isset($this->animaux[$id1], $this->animaux[$id2])
+                && $this->animaux[$id1]->estVivant()
+                && $this->animaux[$id2]->estVivant()
+            ) {
+                $a1 = $this->animaux[$id1];
+                $a2 = $this->animaux[$id2];
+
+                $this->points--;
+                $blessure = $a1->jouerAvec($a2);
+
+                $this->messages[] = $a1->getNom() . ' et ' . $a2->getNom() . ' ont joué ensemble ! (+humeur)' . $blessure;
+            }
+        }
+    }
+
+    private function actionCombat()
+    {
+        if ($this->points >= 2 && isset($_GET['id1'], $_GET['id2'])) {
+            $id1 = $_GET['id1'];
+            $id2 = $_GET['id2'];
+
+            if ($id1 !== $id2
+                && isset($this->animaux[$id1], $this->animaux[$id2])
+                && $this->animaux[$id1]->estVivant()
+                && $this->animaux[$id2]->estVivant()
+            ) {
+                $attaquant = $this->animaux[$id1];
+                $cible     = $this->animaux[$id2];
+
+                $this->points -= 2;
+
+                // 70% chance de tuer, sinon dégâts aléatoires
+                if (rand(1, 100) <= 70) {
+                    $degats = $cible->getSante();
+                    $this->messages[] = $attaquant->getNom() . ' attaque ' . $cible->getNom() . ' — coup fatal ! (-' . $degats . ' PV)';
+                } else {
+                    $degats = rand(10, 50);
+                    $this->messages[] = $attaquant->getNom() . ' attaque ' . $cible->getNom() . ' — -' . $degats . ' PV !';
+                }
+
+                $cible->evoluerSante(-$degats);
+            }
         }
     }
 

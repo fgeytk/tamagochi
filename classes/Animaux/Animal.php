@@ -103,6 +103,129 @@ class Animal
         $this -> evoluerHumeur(rand(20,100));
     }
 
+    public function jouerAvec(Animal $autre): string
+    {
+        $gain = rand(20, 40);
+        $this->evoluerHumeur($gain);
+        $autre->evoluerHumeur($gain);
+
+        $message = '';
+        if (rand(0, 100) < 30) {
+            $blesse = rand(0, 1) ? $this : $autre;
+            $blesse->evoluerSante(-rand(5, 15));
+            $message = ' Mais ' . $blesse->getNom() . ' s\'est blessé en jouant !';
+        }
+
+        return $message;
+    }
+
+    // -------- COMBAT --------
+
+    public function getForceAttaque(): int
+    {
+        return rand(8, 16) + (int)($this->humeur / 12);
+    }
+
+    public function getForceDefense(): int
+    {
+        return rand(3, 8) + (int)($this->sante / 25);
+    }
+
+    /** Retourne true si cet animal esquive l'attaque reçue ce tour. */
+    public function esquive(): bool
+    {
+        return false;
+    }
+
+    /** Retourne true si cet animal effectue une seconde frappe ce tour. */
+    public function doubleAttaque(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Simule un combat contre $adversaire, applique les dégâts réels et
+     * retourne le log détaillé du combat (tableau de chaînes).
+     */
+    public function combattre(Animal $adversaire): array
+    {
+        $log  = [];
+        $hpA  = $this->sante;
+        $hpB  = $adversaire->sante;
+
+        $log[] = '⚔️  ' . $this->getNom() . ' (' . $hpA . 'pv) VS '
+               . $adversaire->getNom() . ' (' . $hpB . 'pv) — QUE LE COMBAT COMMENCE !';
+
+        for ($round = 1; $round <= 8 && $hpA > 0 && $hpB > 0; $round++) {
+            $msg = 'Tour ' . $round . ' : ';
+
+            // A attaque B
+            if ($adversaire->esquive()) {
+                $msg .= $adversaire->getNom() . ' esquive ! ';
+            } else {
+                $dmg  = max(1, $this->getForceAttaque() - $adversaire->getForceDefense());
+                $hpB  = max(0, $hpB - $dmg);
+                $msg .= $this->getNom() . ' frappe ' . $adversaire->getNom() . ' (−' . $dmg . 'pv). ';
+            }
+
+            // Double frappe de A
+            if ($hpB > 0 && $this->doubleAttaque()) {
+                if ($adversaire->esquive()) {
+                    $msg .= 'Frappe rapide esquivée ! ';
+                } else {
+                    $dmg2 = max(1, $this->getForceAttaque() - $adversaire->getForceDefense());
+                    $hpB  = max(0, $hpB - $dmg2);
+                    $msg .= '⚡ Frappe rapide ! −' . $dmg2 . 'pv. ';
+                }
+            }
+
+            // B riposte (si encore debout)
+            if ($hpB > 0) {
+                if ($this->esquive()) {
+                    $msg .= $this->getNom() . ' esquive la riposte ! ';
+                } else {
+                    $dmg  = max(1, $adversaire->getForceAttaque() - $this->getForceDefense());
+                    $hpA  = max(0, $hpA - $dmg);
+                    $msg .= $adversaire->getNom() . ' riposte (−' . $dmg . 'pv). ';
+                }
+
+                // Double frappe de B
+                if ($hpA > 0 && $adversaire->doubleAttaque()) {
+                    if ($this->esquive()) {
+                        $msg .= 'Frappe rapide esquivée !';
+                    } else {
+                        $dmg2 = max(1, $adversaire->getForceAttaque() - $this->getForceDefense());
+                        $hpA  = max(0, $hpA - $dmg2);
+                        $msg .= '⚡ Frappe rapide ! −' . $dmg2 . 'pv.';
+                    }
+                }
+            }
+
+            $msg .= ' [' . $this->getNom() . ': ' . $hpA . 'pv | ' . $adversaire->getNom() . ': ' . $hpB . 'pv]';
+            $log[] = $msg;
+        }
+
+        // Résultat
+        if ($hpA > $hpB) {
+            $log[] = '🏆 ' . $this->getNom() . ' remporte le combat !';
+        } elseif ($hpB > $hpA) {
+            $log[] = '🏆 ' . $adversaire->getNom() . ' remporte le combat !';
+        } else {
+            $log[] = '🤝 Egalité épique ! Les deux guerriers s\'effondrent épuisés !';
+        }
+
+        // Application des dégâts réels
+        $this->evoluerSante(-max(0, $this->sante - $hpA));
+        $adversaire->evoluerSante(-max(0, $adversaire->sante - $hpB));
+
+        return $log;
+    }
+
+    public function getSymbol(): string
+    {
+        return '(o_o)';
+    }
+
     protected function vieillir()
     {
         $this->age++;
@@ -140,7 +263,7 @@ class Animal
         $this->humeur = max($this->humeur, 0);
     }
 
-    protected function evoluerSante($variation)
+    public function evoluerSante($variation)
     {
         $this->sante += $variation;
         $this->sante = min($this->sante, 100);

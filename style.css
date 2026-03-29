@@ -1,0 +1,174 @@
+/* ========== GENERAL ========== */
+body {
+    font-family: 'Comic Sans MS', cursive !important;
+}
+
+h1 {
+    color: #cc0000 !important;
+    text-shadow: 2px 2px #ffcc00;
+}
+
+h2 {
+    color: #000080 !important;
+}
+
+/* ========== CARDS ========== */
+.card-90s {
+    border-width: 3px !important;
+    border-style: dashed !important;
+}
+
+.card-chat {
+    background: #ffccff !important;
+    border-color: #cc00cc !important;
+}
+
+.card-chien {
+    background: #ffffaa !important;
+    border-color: #cc8800 !important;
+}
+
+.card-lapin {
+    background: #ccffcc !important;
+    border-color: #008800 !important;
+}
+
+.card-animal {
+    background: #ccccff !important;
+    border-color: #0000cc !important;
+}
+
+/* ========== ANIMAL SYMBOL ========== */
+.animal-symbol {
+    font-size: 2.2em;
+    font-family: monospace;
+    text-align: center;
+    display: block;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+}
+
+/* ========== STATS COLORS ========== */
+.stat-faim {
+    color: #cc4400;
+    font-weight: bold;
+}
+
+.stat-soif {
+    color: #0044cc;
+    font-weight: bold;
+}
+
+.stat-humeur {
+    color: #9900cc;
+    font-weight: bold;
+}
+
+.stat-sante {
+    color: #007700;
+    font-weight: bold;
+}
+
+/* ========== BUTTONS ========== */
+.btn-90s {
+    background: linear-gradient(#ffdd44, #ff9900) !important;
+    border: 3px outset #ffcc00 !important;
+    font-weight: bold !important;
+    color: #000 !important;
+}
+
+.btn-danger-90s {
+    background: linear-gradient(#ff6666, #cc0000) !important;
+    border: 3px outset #ff4444 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+/* ========== FORMS ========== */
+.form-90s {
+    background: #ffffcc;
+    border: 4px ridge #ff6600;
+}
+
+.form-jeu {
+    background: #e0f0ff;
+    border: 4px ridge #0000cc;
+}
+
+.form-combat {
+    background: #fff0f0;
+    border: 4px ridge #cc0000;
+}
+
+.btn-combat {
+    background: linear-gradient(#ff4444, #880000) !important;
+    border: 3px outset #cc0000 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    font-family: 'Comic Sans MS', cursive !important;
+    text-shadow: 1px 1px #000 !important;
+}
+
+/* ========== ACTIONS LINKS ========== */
+.action-link {
+    font-weight: bold;
+    text-decoration: none;
+    padding: 1px 5px;
+    border: 2px outset;
+    margin: 1px;
+    display: inline-block;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.link-soigner {
+    color: #cc0000 !important;
+    border-color: #cc0000;
+    background: #ffeeee;
+}
+
+.link-caresse {
+    color: #9900cc !important;
+    border-color: #9900cc;
+    background: #ffeeff;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.blink {
+    animation: blink 1s step-start infinite;
+}
+
+/* ========== PROGRESS BARS ========== */
+.stat-bar-wrap {
+    border: 2px inset #888;
+    background: #ccc;
+    height: 14px;
+    width: 100%;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+.stat-bar {
+    height: 100%;
+    display: block;
+}
+
+.bar-faim {
+    background: repeating-linear-gradient(90deg, #cc4400 0 8px, #ff7733 8px 16px);
+}
+
+.bar-soif {
+    background: repeating-linear-gradient(90deg, #0044cc 0 8px, #4488ff 8px 16px);
+}
+
+.bar-humeur {
+    background: repeating-linear-gradient(90deg, #9900cc 0 8px, #cc44ff 8px 16px);
+}
+
+.bar-sante {
+    background: repeating-linear-gradient(90deg, #007700 0 8px, #33cc33 8px 16px);
+}
